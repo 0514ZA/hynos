@@ -1,0 +1,14 @@
+# 统一行尾：源码与脚本一律 LF。
+# 本工程在 Windows 上开发，若不固定 eol，checkout 会把 .sh / .S / .ld 写成 CRLF，
+# 直接导致 shell 脚本与汇编器报错。
+* text=auto eol=lf
+
+# 二进制内容，禁止任何行尾/编码转换
+*.fd   binary
+*.bin  binary
+*.img  binary
+*.efi  binary
+*.exe  binary
+*.zip  binary
+*.ico  binary
+*.png  binary
