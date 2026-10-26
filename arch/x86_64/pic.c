@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— 8259A 中断控制器实装（x86_64）
+ * HynOS —— 8259A 中断控制器实装（x86_64）
  */
 #include <hyn/pic.h>
 #include <hyn/arch.h>

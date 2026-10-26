@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— CPU 识别实装（x86_64）
+ * HynOS —— CPU 识别实装（x86_64）
  */
 #include <hyn/cpu.h>
 

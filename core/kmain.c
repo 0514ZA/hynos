@@ -1,5 +1,5 @@
 /*
- * 混元智能分层混合内核 —— 内核主入口
+ * HynOS 智能分层混合内核 —— 内核主入口
  *
  * 本文件只做"主线串联"：
  *   清零 BSS -> 保存引导信息 -> 拉起控制台 -> 初始化 HAL(设备登记)
@@ -94,7 +94,7 @@ static void print_banner(void)
 {
     kputs("\n");
     kputs("=============================================================\n");
-    kputs("  混元智能分层混合内核 (Hunyuan Layered Hybrid Kernel)\n");
+    kputs("  HynOS 智能分层混合内核 (HynOS Layered Hybrid Kernel)\n");
     kputs("  硬核底座 + 快通道分组故障域 / 运行于 Ring0 内核态\n");
     kprintf("  架构: %s  构建时间戳: %s\n", arch_name(), HYN_BUILD_STAMP);
     kputs("=============================================================\n");
@@ -556,6 +556,9 @@ static void selftest_scheduler(void)
     int woke_low, woke_high, woke_coop, woke_spin;
     u32 sw0, spins0;
     u64 t0;
+    /* 抢占自检诊断快照：仅在未通过时随"抢占明细"打印，便于区分两条引导路径的时序差异 */
+    u32 spins_after_yield = 0u, preempt_after_yield = 0u;
+    u64 t_after_yield = 0u;
 
     kputs("\n---- 硬核底座自检：进程/线程调度 ----\n");
 
@@ -612,11 +615,17 @@ static void selftest_scheduler(void)
     hyn_sched_set_preempt(1);
     if (spinner != NULL) {
         hyn_sched_yield();      /* 让自旋线程先上 CPU；它开着中断，节拍会把它抢下来 */
+        spins_after_yield   = g_probe_spins;
+        preempt_after_yield = hyn_sched_preempt_count();
+        t_after_yield       = hyn_timer_ticks();
         /*
-         * 被抢占回来时至少已经过一个节拍。若自旋线程还活着，再等它被抢占一次，
-         * 用节拍数兜底（节拍不足则说明抢占没发生，下面的断言会如实报出来）。
+         * 必须等到"自旋线程确实自增过"且"抢占计数已增加"两个可观测事实同时成立。
+         * 只等抢占计数是不够的：若 yield 恰好落在节拍边界上，自旋线程可能在执行第一条
+         * 自增指令之前就被抢回主线程——此时抢占已发生（计数 +1），但自旋次数仍为 0，
+         * 立即退出等待会把它误判成失败。两个事实都等到，判定口径不放宽。
          */
-        while (hyn_sched_preempt_count() == 0u && hyn_timer_ticks() < t0 + 20u) {
+        while ((g_probe_spins == 0u || hyn_sched_preempt_count() == 0u) &&
+               hyn_timer_ticks() < t0 + 40u) {
             (void)hyn_sched_block_timeout((void *)&g_probe_spins, 1ull);
         }
         g_probe_stop = 1u;
@@ -637,12 +646,14 @@ static void selftest_scheduler(void)
 
         if (!ok_preempt) {
             kprintf("  抢占明细：句柄%s 抢占计数=%u 唤醒=%d 自旋线程运行次数=%u "
-                    "让出次数=%u 退出码=0x%x 切换 %u->%u 自旋次数=%u\n",
+                    "让出次数=%u 退出码=0x%x 切换 %u->%u 自旋次数=%u "
+                    "[yield 后：自旋=%u 抢占=%u 节拍=%u 起点节拍=%u]\n",
                     (spinner != NULL) ? "可用" : "为空", hyn_sched_preempt_count(), woke_spin,
                     (spinner != NULL) ? hyn_thread_run_count(spinner) : 0u,
                     (spinner != NULL) ? hyn_thread_yield_count(spinner) : 0u,
                     (spinner != NULL) ? (u32)hyn_thread_exit_code(spinner) : 0u,
-                    sw0, hyn_sched_switch_count(), spins0);
+                    sw0, hyn_sched_switch_count(), spins0,
+                    spins_after_yield, preempt_after_yield, (u32)t_after_yield, (u32)t0);
         }
         check("时钟节拍抢占：更高优先级线程把低优先级自旋线程抢下去（时间片真的生效）",
               ok_preempt, "");

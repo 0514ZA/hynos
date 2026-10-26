@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # ============================================================
-# 混元 OS 构建脚本（x86_64 裸机内核）
+# HynOS 构建脚本（x86_64 裸机内核）
 #
 # 工具链：ziglang 内置 clang/lld/objcopy（本机无系统 gcc/clang/make）
 #   编译 : python -m ziglang cc -target x86_64-freestanding
 #   链接 : 同上，使用自研链接脚本
 #   转盘 : python -m ziglang objcopy --output-target=binary
-# 产物：build/hunyuan.img（BIOS 可直接引导的磁盘镜像）
+# 产物：build/hynos.img（BIOS 可直接引导的磁盘镜像）
 # ============================================================
 set -euo pipefail
 
@@ -92,9 +92,9 @@ done < <(find "$ROOT/arch" -name '*.S' ! -name 'boot.S' | sort)
 echo "[build] 链接内核镜像"
 $ZIGCC $CFLAGS -Wl,--build-id=none -Wl,-T,"$ROOT/linker.ld" -Wl,-e,_start64 \
     -Wl,-z,max-page-size=4096 \
-    -o "$BUILD/hunyuan.elf" "${OBJS[@]}"
+    -o "$BUILD/hynos.elf" "${OBJS[@]}"
 
-$ZIGOBJCOPY --output-target=binary "$BUILD/hunyuan.elf" "$BUILD/hunyuan.bin"
+$ZIGOBJCOPY --output-target=binary "$BUILD/hynos.elf" "$BUILD/hynos.bin"
 
 echo "[build] 汇编引导扇区"
 $ZIGCC $CFLAGS -c "$ROOT/arch/x86_64/boot/boot.S" -o "$OBJDIR/boot.o"
@@ -108,20 +108,20 @@ $ZIGCC $CFLAGS -Wl,--build-id=none -Wl,-T,"$ROOT/uefi/uefi.ld" -Wl,-e,efi_main \
     -Wl,-z,max-page-size=4096 -o "$BUILD/uefi.elf" "$OBJDIR/uefi_boot.S.o"
 
 echo "[build] ELF -> PE32+，并注入内核负载与回填字段"
-python "$ROOT/tools/mkpe.py" "$BUILD/uefi.elf" "$BUILD/hunyuan.bin" \
-    "$BUILD/hunyuan.elf" "$BUILD/BOOTX64.EFI"
+python "$ROOT/tools/mkpe.py" "$BUILD/uefi.elf" "$BUILD/hynos.bin" \
+    "$BUILD/hynos.elf" "$BUILD/BOOTX64.EFI"
 
 echo "[build] 合成双引导磁盘镜像（保护性 MBR + GPT + FAT32 ESP + 内核裸区）"
-python "$ROOT/tools/mkgpt.py" "$BUILD/boot.bin" "$BUILD/hunyuan.bin" \
-    "$BUILD/BOOTX64.EFI" "$BUILD/hunyuan.img"
+python "$ROOT/tools/mkgpt.py" "$BUILD/boot.bin" "$BUILD/hynos.bin" \
+    "$BUILD/BOOTX64.EFI" "$BUILD/hynos.img"
 
 echo "[build] 离线结构校验（MBR / GPT / FAT32 / PE / 两条路径内核字节一致性）"
-python "$ROOT/tools/imgcheck.py" "$BUILD/hunyuan.img" "$BUILD/boot.bin" \
-    "$BUILD/hunyuan.bin" "$BUILD/hunyuan.elf" "$BUILD/BOOTX64.EFI"
+python "$ROOT/tools/imgcheck.py" "$BUILD/hynos.img" "$BUILD/boot.bin" \
+    "$BUILD/hynos.bin" "$BUILD/hynos.elf" "$BUILD/BOOTX64.EFI"
 
 echo "[build] 另生成仅 BIOS 的精简镜像，便于快速迭代"
-python "$ROOT/tools/mkdisk.py" "$BUILD/boot.bin" "$BUILD/hunyuan.bin" "$BUILD/hunyuan-bios.img"
+python "$ROOT/tools/mkdisk.py" "$BUILD/boot.bin" "$BUILD/hynos.bin" "$BUILD/hynos-bios.img"
 
-ls -l "$BUILD/hunyuan.elf" "$BUILD/uefi.elf" "$BUILD/hunyuan.bin" "$BUILD/boot.bin" \
-      "$BUILD/BOOTX64.EFI" "$BUILD/hunyuan.img" "$BUILD/hunyuan-bios.img"
-echo "[build] 完成：build/hunyuan.img 同时支持 BIOS(MBR) 与 UEFI(GPT+ESP) 两条引导路径"
+ls -l "$BUILD/hynos.elf" "$BUILD/uefi.elf" "$BUILD/hynos.bin" "$BUILD/boot.bin" \
+      "$BUILD/BOOTX64.EFI" "$BUILD/hynos.img" "$BUILD/hynos-bios.img"
+echo "[build] 完成：build/hynos.img 同时支持 BIOS(MBR) 与 UEFI(GPT+ESP) 两条引导路径"

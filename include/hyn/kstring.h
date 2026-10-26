@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— 内核基础字符串/内存操作（架构无关层）
+ * HynOS —— 内核基础字符串/内存操作（架构无关层）
  *
  * 这里以标准名字实现 memcpy/memset/memmove/memcmp/strlen 等，
  * 因为 freestanding 编译时编译器会自行生成对这些符号的调用。

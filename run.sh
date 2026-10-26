@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # ============================================================
-# 混元 OS 启动脚本：用 QEMU 引导 build/hunyuan.img 并抓取自检日志
+# HynOS 启动脚本：用 QEMU 引导 build/hynos.img 并抓取自检日志
 #
 #   ./run.sh                           BIOS/MBR 路径（默认）
 #   ./run.sh uefi                      UEFI/GPT+ESP 路径（需要 OVMF 固件）
 #   ./run.sh uefi <OVMF_CODE.fd> <OVMF_VARS.fd>   显式指定固件
 #
-# 两条路径引导的是同一个 build/hunyuan.img（GPT 与 MBR 共存，内核字节同一份）。
+# 两条路径引导的是同一个 build/hynos.img（GPT 与 MBR 共存，内核字节同一份）。
 #
 # 取证来源：
 #   串口输出      -> build/qemu-serial-<mode>.log   （内核自检的权威日志）
@@ -19,11 +19,11 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODE="${1:-bios}"
 OVMF_CODE_ARG="${2:-}"
 OVMF_VARS_ARG="${3:-}"
-IMG="$ROOT/build/hunyuan.img"
+IMG="$ROOT/build/hynos.img"
 SERIAL_LOG="$ROOT/build/qemu-serial-$MODE.log"
 DEBUG_LOG="$ROOT/build/qemu-debug-$MODE.log"
 # 传给 QEMU 的一律用相对路径，避免 MSYS 路径在 "file:/c/..." 形态下不被转换
-IMG_REL="build/hunyuan.img"
+IMG_REL="build/hynos.img"
 SERIAL_LOG_REL="build/qemu-serial-$MODE.log"
 DEBUG_LOG_REL="build/qemu-debug-$MODE.log"
 
@@ -141,7 +141,7 @@ case "$MODE" in
     uefi)
         OVMF="$(find_ovmf)" || {
             echo "[run] 未找到 OVMF 固件（OVMF_CODE.fd + OVMF_VARS.fd）。" >&2
-            echo "[run] 可放到 hunyuan-kernel/firmware/ 或用 ./run.sh uefi <CODE.fd> <VARS.fd> 指定。" >&2
+            echo "[run] 可放到 hynos-kernel/firmware/ 或用 ./run.sh uefi <CODE.fd> <VARS.fd> 指定。" >&2
             exit 3
         }
         CODE="${OVMF%%|*}"

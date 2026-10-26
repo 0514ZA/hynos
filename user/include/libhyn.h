@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— libhyn：Ring3 用户态库（ALPC 消息总线的用户侧封装）
+ * HynOS —— libhyn：Ring3 用户态库（ALPC 消息总线的用户侧封装）
  *
  * 定位与纪律（对应架构里"上层所有应用跑在 Ring3，靠 syscall + ALPC 与内核通信"）：
  *   · 本库只依赖 include/hyn/abi.h 这一份契约，不 include 任何内核内部头：

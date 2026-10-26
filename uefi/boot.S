@@ -1,5 +1,5 @@
 /*
- * 混元智能分层混合内核 —— UEFI（PE32+）引导程序 BOOTX64.EFI
+ * HynOS 智能分层混合内核 —— UEFI（PE32+）引导程序 BOOTX64.EFI
  *
  * 定位：UEFI 固件（OVMF 等）认到的第一个可执行体。它只负责把"内核负载"送进内存并
  * 交棒给内核镜像内的 UEFI 进入点 _start_uefi（arch/x86_64/boot/entry_uefi.S），
@@ -468,7 +468,7 @@ reserve_kernel_area:
 /* 只读数据（固件控制台只认 UTF-16，这里用 UTF-8 源串，运行时转换）      */
 /* ------------------------------------------------------------------ */
 .section .rodata, "a"
-s_banner:     .asciz "混元 OS UEFI 引导程序 BOOTX64.EFI  [GPT + ESP 引导路径]\r\n"
+s_banner:     .asciz "HynOS UEFI 引导程序 BOOTX64.EFI  [GPT + ESP 引导路径]\r\n"
 s_payload:    .asciz "内嵌内核负载 : "
 s_copied:     .asciz "内核负载已复制到 0x100000，开始取内存映射\r\n"
 s_ready:      .asciz "即将取最终内存映射、交还固件，并跳入内核进入点 : "

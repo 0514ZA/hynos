@@ -20,7 +20,7 @@
 每个 PR 必须能跑通，并附上日志：
 
 ```bash
-cd hunyuan-kernel
+cd hynos-kernel
 ./build.sh          # 必须全绿，无新增 warning
 ./run.sh bios       # 必须 72/72
 ./run.sh uefi       # 必须 72/72

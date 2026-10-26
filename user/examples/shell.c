@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— Ring3 示例程序 Shell 骨架
+ * HynOS —— Ring3 示例程序 Shell 骨架
  *
  * 这个程序就是"新增业务功能"的标准形态：纯用户态、只 include libhyn 与 ABI 契约，
  * 通过 syscall + ALPC 向内核服务端口（core.req，硬核底座）提问，内核在安全点应答。

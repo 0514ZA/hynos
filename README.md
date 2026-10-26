@@ -1,6 +1,6 @@
-# 混元智能分层混合内核（Hunyuan Layered Hybrid Kernel）
+# HynOS 智能分层混合内核（HynOS Layered Hybrid Kernel）
 
-x86_64 裸机内核。Ring0 分为「混元硬核底座」+「快通道分组故障域」；跨故障域通信强制走
+x86_64 裸机内核。Ring0 分为「HynOS 硬核底座」+「快通道分组故障域」；跨故障域通信强制走
 ALPC 消息、禁止跨域直接函数调用；代码分为架构无关核心 + arch 架构适配层；上层 AI 与应用
 全部跑在 Ring3 用户态，依靠 syscall + ALPC 与内核通信。
 
@@ -12,7 +12,7 @@ ALPC 消息、禁止跨域直接函数调用；代码分为架构无关核心 + 
 ## 1. 目录结构
 
 ```
-hunyuan-kernel/
+hynos-kernel/
 ├── build.sh                构建脚本（编译用户态 -> 编译/链接内核 -> 生成双引导镜像 -> 离线校验）
 ├── run.sh                  启动脚本（QEMU 引导同一镜像的 BIOS 或 UEFI 路径并抓取串口日志）
 ├── linker.ld               内核链接脚本（入口段排最前，丢弃 .eh_frame/.note/.comment）
@@ -81,7 +81,7 @@ ZIGCC="python -m ziglang cc" ZIGOBJCOPY="python -m ziglang objcopy" ./build.sh
 ### 命令
 
 ```bash
-cd hunyuan-kernel
+cd hynos-kernel
 ./build.sh
 ```
 
@@ -94,7 +94,7 @@ cd hunyuan-kernel
 4. 链接内核、`objcopy` 出平铺 `.bin`；
 5. 汇编 MBR 引导扇区；汇编并链接 UEFI 引导程序；
 6. `tools/mkpe.py` 转 PE32+，注入内核负载并回填 `g_kernel_size` / `g_kernel_entry_off`；
-7. `tools/mkgpt.py` 合成**同时支持两条引导路径**的单一镜像 `build/hunyuan.img`；
+7. `tools/mkgpt.py` 合成**同时支持两条引导路径**的单一镜像 `build/hynos.img`；
 8. `tools/imgcheck.py` 离线结构校验。
 
 可复现构建：构建时间戳取自 `HYN_BUILD_STAMP` 环境变量，未设置时才取当前时间；
@@ -104,12 +104,12 @@ cd hunyuan-kernel
 
 | 产物 | 说明 |
 | --- | --- |
-| `build/hunyuan.img` | **交付主产物**：GPT + FAT32 ESP + 内核裸区的双引导镜像（44040192 字节） |
-| `build/hunyuan.bin` | 内核平铺镜像（92952 字节 / 182 扇区） |
-| `build/hunyuan.elf` | 内核 ELF（含符号，供调试） |
+| `build/hynos.img` | **交付主产物**：GPT + FAT32 ESP + 内核裸区的双引导镜像（44040192 字节） |
+| `build/hynos.bin` | 内核平铺镜像（93096 字节 / 182 扇区） |
+| `build/hynos.elf` | 内核 ELF（含符号，供调试） |
 | `build/BOOTX64.EFI` | UEFI 引导程序（PE32+，265216 字节） |
 | `build/boot.bin` | MBR 引导代码（361 字节，上限 432） |
-| `build/hunyuan-bios.img` | 仅 BIOS 的精简镜像，便于快速迭代 |
+| `build/hynos-bios.img` | 仅 BIOS 的精简镜像，便于快速迭代 |
 
 镜像布局：LBA0 保护性 MBR（保留 BIOS 引导代码）→ LBA1–33 GPT（主头 + 128 项 + 备份头）
 → LBA34 起内核裸区（BIOS 路径固定读此处）→ LBA2048 起 FAT32 ESP（40 MiB）。
@@ -266,7 +266,7 @@ libhyn 审计: 用户 syscall 27 次 / 非法指针挡下 3 次 / 越权收他�
 
 ### Licensing (English)
 
-HunyuanOS is **dual-licensed**. The public license is **AGPL-3.0-only**
+HynOS is **dual-licensed**. The public license is **AGPL-3.0-only**
 (see [`LICENSE`](LICENSE)): you may use, modify and redistribute it freely as long as you
 comply with the AGPL, including its §13 network clause. To embed it in a **closed-source**
 product, or to run it as a service **without** releasing the corresponding source, you need a

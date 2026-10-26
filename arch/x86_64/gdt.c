@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— GDT 实装（x86_64 架构适配层）
+ * HynOS —— GDT 实装（x86_64 架构适配层）
  */
 #include <hyn/gdt.h>
 #include <hyn/cpu.h>

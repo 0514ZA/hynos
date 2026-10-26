@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— 硬件总线组实现（ACPI 表发现 + PCI/PCIe 枚举清点）
+ * HynOS —— 硬件总线组实现（ACPI 表发现 + PCI/PCIe 枚举清点）
  *
  * 做的事只有两类，都要求"读数可核对"：
  *   1) 真实扫 ACPI：按 "RSD PTR " 签名在 EBDA 与 0xE0000..0xFFFFF 逐 16 字节找表根，

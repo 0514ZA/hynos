@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-混元 OS —— 精简 BIOS 镜像生成工具（仅 MBR 路径，用于快速迭代）
+HynOS —— 精简 BIOS 镜像生成工具（仅 MBR 路径，用于快速迭代）
 
 它是 tools/mkgpt.py 的"只留 BIOS 路径"版本：磁盘布局与双引导镜像保持一致，
 只是不写 GPT 分区表与 FAT32 ESP，因此产物体积从约 42MB 降到几十 KB：
@@ -10,7 +10,7 @@
     LBA 1..33  : 留空（双引导镜像里是 GPT 主头与分区项数组）
     LBA 34 起  : 内核镜像裸区（与引导代码写死的起始 LBA 一致）
 
-正式交付与 UEFI 路径一律使用 tools/mkgpt.py 产出的 build/hunyuan.img；
+正式交付与 UEFI 路径一律使用 tools/mkgpt.py 产出的 build/hynos.img；
 本工具只保证"BIOS 路径的引导行为与整体镜像完全一致"。
 
 回填字段（引导汇编按固定物理地址读取，不得超过 432 字节代码空间）：

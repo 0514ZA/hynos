@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— 中断描述符表（IDT）接口
+ * HynOS —— 中断描述符表（IDT）接口
  */
 #ifndef HYN_IDT_H
 #define HYN_IDT_H

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-混元 OS —— 单镜像双引导合成工具（保护性 MBR + GPT + FAT32 ESP + BIOS 内核裸区）
+HynOS —— 单镜像双引导合成工具（保护性 MBR + GPT + FAT32 ESP + BIOS 内核裸区）
 
 一个镜像文件同时满足两条引导路径：
 
@@ -15,8 +15,8 @@
     LBA 2048      FAT32 EFI 系统分区（ESP），内含 \\EFI\\BOOT\\BOOTX64.EFI
     末尾 33 扇区   GPT 备份头 + 备份分区项数组
 
-两条路径进入的是**同一份内核字节**：裸区放的是 build/hunyuan.bin，
-BOOTX64.EFI 内嵌的负载也是 build/hunyuan.bin（由 tools/mkpe.py 注入）。
+两条路径进入的是**同一份内核字节**：裸区放的是 build/hynos.bin，
+BOOTX64.EFI 内嵌的负载也是 build/hynos.bin（由 tools/mkpe.py 注入）。
 ESP 用 512 字节簇，故 40MiB 规模下簇数 80608 ≥ 65525，符合 FAT32 判定阈值。
 
 用法:

@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— syscall 唯一入口（Ring3 -> Ring0）
+ * HynOS —— syscall 唯一入口（Ring3 -> Ring0）
  *
  * 入口形态：IDT 向量 0x80 的 DPL=3 中断门。全内核只有这一个门允许 Ring3 进入，
  * 其它门（异常 0..31、硬件中断 32..47）一律 DPL=0 ——"syscall 是唯一入口"这条纪律

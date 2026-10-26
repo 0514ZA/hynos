@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— 基础类型与状态码（架构无关层使用，纯 C，不依赖任何 CPU 头文件）
+ * HynOS —— 基础类型与状态码（架构无关层使用，纯 C，不依赖任何 CPU 头文件）
  */
 #ifndef HYN_TYPES_H
 #define HYN_TYPES_H

@@ -1,4 +1,4 @@
-/* 混元 OS —— 字符串/内存操作实现（纯 C，架构无关） */
+/* HynOS —— 字符串/内存操作实现（纯 C，架构无关） */
 #include <hyn/kstring.h>
 
 void *memcpy(void *dst, const void *src, unsigned long n)

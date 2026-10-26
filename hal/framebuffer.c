@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— Framebuffer HAL 设备（VGA 文本模式）
+ * HynOS —— Framebuffer HAL 设备（VGA 文本模式）
  *
  * 说明：BIOS 交出的 VGA 文本模式即一块真实的显示后端，直接作为 HAL 的
  * Framebuffer 设备实例实装（图形帧缓冲行列在后续图形驱动接入时替换内部实现，

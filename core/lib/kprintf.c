@@ -1,4 +1,4 @@
-/* 混元 OS —— 内核格式化输出实现（纯 C，架构无关） */
+/* HynOS —— 内核格式化输出实现（纯 C，架构无关） */
 #include <hyn/kprintf.h>
 #include <hyn/kstring.h>
 
@@ -279,7 +279,7 @@ void kprintf(const char *fmt, ...)
 
 void kpanic(const char *fmt, ...)
 {
-    kputs("\n*** [混元 OS] 内核致命错误: ");
+    kputs("\n*** [HynOS] 内核致命错误: ");
     __builtin_va_list ap;
     __builtin_va_start(ap, fmt);
     kvprintf(fmt, ap);

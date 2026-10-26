@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-混元 OS —— UEFI 引导程序 ELF -> PE32+ 转换与构建期注入工具
+HynOS —— UEFI 引导程序 ELF -> PE32+ 转换与构建期注入工具
 
 把 uefi/boot.S 经 uefi/uefi.ld 链接出的 ELF64 转成固件可加载的 PE32+ 可执行体
 （EFI Application，Subsystem = 10），并完成两项构建期注入：

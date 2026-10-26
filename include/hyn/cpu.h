@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— CPU 专属原语（x86_64）
+ * HynOS —— CPU 专属原语（x86_64）
  *
  * 仅供 arch 适配层使用；上层（core/hal）一律通过 hyn/arch.h 的架构无关接口。
  */

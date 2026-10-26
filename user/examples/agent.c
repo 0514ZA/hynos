@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— Ring3 示例程序 Agent 骨架
+ * HynOS —— Ring3 示例程序 Agent 骨架
  *
  * 与 Shell 骨架的分工：Shell 问底座（core.req，同域），Agent 问的是**另一个故障域**——
  * 网络组的服务口 net.svc。这条路径是"跨故障域强制走 ALPC 消息"在用户态一侧的落点：

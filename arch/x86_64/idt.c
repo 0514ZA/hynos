@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— IDT 实装（x86_64 架构适配层）
+ * HynOS —— IDT 实装（x86_64 架构适配层）
  */
 #include <hyn/idt.h>
 #include <hyn/trap.h>

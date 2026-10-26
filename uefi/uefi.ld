@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— UEFI 引导程序链接脚本（ELF 阶段；随后由 tools/mkpe.py 转成 PE32+）
+ * HynOS —— UEFI 引导程序链接脚本（ELF 阶段；随后由 tools/mkpe.py 转成 PE32+）
  *
  * 与内核链接脚本的差别：
  *   · 装载地址 0x10000000 只用于对齐 PE 的 RVA；代码全部 RIP 相对寻址，

@@ -1,9 +1,9 @@
 /*
- * 混元 OS —— UEFI 引导进入点（.text.bootuefi，内核镜像内）
+ * HynOS —— UEFI 引导进入点（.text.bootuefi，内核镜像内）
  *
  * 与 BIOS 路径的区别：UEFI 固件已经把控制权交给引导程序（PE32+）时，CPU 已处于
  * 长模式，但运行在现场是"固件的 GDT + 固件的页表"之下。本阶段负责把运行现场切换
- * 成"混元自己的 GDT + 混元自己的 0..4GB 恒等映射"，然后交给内核 64 位入口。
+ * 成"HynOS 自己的 GDT + HynOS 自己的 0..4GB 恒等映射"，然后交给内核 64 位入口。
  *
  * 约定（由引导程序保证）：
  *   · 内核镜像已被复制到 0x100000
@@ -15,7 +15,7 @@
 .globl _start_uefi
 .type _start_uefi, @function
 _start_uefi:
-    /* 1) 装载混元自己的 GDT，并重装 CS 与数据段寄存器 */
+    /* 1) 装载HynOS 自己的 GDT，并重装 CS 与数据段寄存器 */
     leaq uefi_gdt_desc(%rip), %rax
     lgdt (%rax)
 

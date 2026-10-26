@@ -1,5 +1,5 @@
 /*
- * 混元 OS —— Ring3 用户程序入口桩（libhyn 运行时的一部分）
+ * HynOS —— Ring3 用户程序入口桩（libhyn 运行时的一部分）
  *
  * 装载约定（与内核 include/hyn/userprog.h 一致）：内核把入口 RIP 指向本桩，并把用户栈顶
  * 设成"参数块起点"，栈顶按 hyn_abi_user_args_t 布局依次放着
